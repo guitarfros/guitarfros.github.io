@@ -8,7 +8,32 @@
     { key: "win",   label: "WIN",    suffix: "win" },
   ];
 
-  const state = { group: SITE.groups[0].id, index: 0 };
+  const LANGS = ["gl", "es", "en"];
+  function initialLang() {
+    try { const s = localStorage.getItem("gf-lang"); if (LANGS.includes(s)) return s; } catch (e) {}
+    const n = (navigator.language || "").slice(0, 2).toLowerCase();
+    return LANGS.includes(n) ? n : "en";
+  }
+  const state = { group: SITE.groups[0].id, index: 0, lang: initialLang() };
+  // L: texto simple ou {gl,es,en}  ·  T: texto fixo da interface
+  const L = (v) => (v && typeof v === "object") ? (v[state.lang] || v.gl || Object.values(v)[0] || "") : (v || "");
+  const T = (k) => (I18N[state.lang] && I18N[state.lang][k]) || I18N.gl[k] || k;
+
+  function applyStatic() {
+    document.documentElement.lang = state.lang;
+    document.title = T("title");
+    const m = document.querySelector('meta[name="description"]'); if (m) m.content = T("metaDesc");
+    document.querySelectorAll("[data-i18n]").forEach((e) => { e.textContent = T(e.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-aria]").forEach((e) => e.setAttribute("aria-label", T(e.dataset.i18nAria)));
+    document.querySelectorAll("[data-i18n-alt]").forEach((e) => e.setAttribute("alt", T(e.dataset.i18nAlt)));
+    document.querySelectorAll(".lang [data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
+  }
+  function setLang(l) {
+    state.lang = l;
+    try { localStorage.setItem("gf-lang", l); } catch (e) {}
+    applyStatic();
+    renderAll(true);
+  }
   const list = () => PLUGINS.filter((p) => p.group === state.group);
 
   /* ---------- chapa plateada xerada (cando non hai imaxe) ---------- */
@@ -39,7 +64,11 @@
           <stop offset="0" stop-color="#6a6d71"/><stop offset="1" stop-color="#1f2022"/>
         </radialGradient>
       </defs>
+      <filter id="wn${p.id}" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="4" seed="${h % 40}" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .24  0 0 0 0 .07  3 0 0 0 -1.7"/></filter>
+      <filter id="bl${p.id}"><feGaussianBlur stdDeviation="9"/></filter>
+      <mask id="mk${p.id}"><rect width="400" height="300" fill="#000"/><rect x="4" y="4" width="392" height="292" rx="10" fill="none" stroke="#fff" stroke-width="40" filter="url(#bl${p.id})"/></mask>
       <rect x="4" y="4" width="392" height="292" rx="10" fill="url(#pl${p.id})" stroke="#6d7074" stroke-width="3"/>
+      <rect x="4" y="4" width="392" height="292" rx="10" filter="url(#wn${p.id})" mask="url(#mk${p.id})" style="mix-blend-mode:multiply"/>
       <rect x="14" y="14" width="372" height="272" rx="6" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/>
       <g fill="#8e9296" stroke="#4a4c4f" stroke-width="1.2">
         <circle cx="28" cy="28" r="7"/><circle cx="372" cy="28" r="7"/><circle cx="28" cy="272" r="7"/><circle cx="372" cy="272" r="7"/>
@@ -49,7 +78,7 @@
       <text x="200" y="124" text-anchor="middle" font-family="'Alfa Slab One',serif" font-size="${long ? 34 : 46}" fill="#1b1c1e" stroke="rgba(255,255,255,.7)" stroke-width=".6" paint-order="stroke">${esc(p.name)}</text>
       <line x1="60" y1="150" x2="340" y2="150" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>
       <line x1="60" y1="152" x2="340" y2="152" stroke="rgba(255,255,255,.7)" stroke-width="1"/>
-      <text x="200" y="176" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="16" letter-spacing="3" fill="#4a4c4f">${esc((p.tag || "").toUpperCase())}</text>
+      <text x="200" y="176" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="16" letter-spacing="3" fill="#4a4c4f">${esc(L(p.tag).toUpperCase())}</text>
       ${p.group === "apps" ? "" : k}
       ${p.group === "apps" ? `<g transform="translate(200 232)"><circle r="26" fill="#f1ebd8" stroke="#1b1c1e" stroke-width="3"/><text y="9" text-anchor="middle" font-family="'Alfa Slab One',serif" font-size="26" fill="#1b1c1e">GF</text></g>` : ""}
       <circle cx="356" cy="58" r="7" fill="${g.led}" stroke="#2a2b2d" stroke-width="2"/>
@@ -88,7 +117,7 @@
       b.type = "button";
       b.setAttribute("aria-pressed", String(g.id === state.group));
       b.style.setProperty("--led", g.led);
-      b.innerHTML = `<i class="led"></i><span>${esc(g.title)}</span>`;
+      b.innerHTML = `<i class="led"></i><span>${esc(L(g.title))}</span>`;
       b.onclick = () => { state.group = g.id; state.index = 0; renderAll(true); };
       nav.appendChild(b);
     });
@@ -149,17 +178,17 @@
     const g = groupOf(p.group);
     $("d-brand").textContent = g.brand;
     $("d-name").textContent = p.name;
-    $("d-tag").textContent = p.tag || "";
-    $("d-desc").textContent = p.description || "";
+    $("d-tag").textContent = L(p.tag);
+    $("d-desc").textContent = L(p.description);
     const box = $("d-downloads");
     box.innerHTML = "";
     OS.forEach((os) => {
       const url = dlUrl(p, os);
       const a = document.createElement(url ? "a" : "span");
       a.className = "push" + (url ? "" : " off");
-      a.innerHTML = `<small>Descargar para</small><b>${os.label}</b>`;
+      a.innerHTML = `<small>${esc(T("dl.for"))}</small><b>${os.label}</b>`;
       if (url) { a.href = url; a.rel = "noopener"; }
-      else { a.setAttribute("aria-disabled", "true"); a.title = "Non dispoñible"; }
+      else { a.setAttribute("aria-disabled", "true"); a.title = T("dl.na"); }
       box.appendChild(a);
     });
     history.replaceState(null, "", `#${p.group}/${p.id}`);
@@ -187,6 +216,7 @@
   });
 
   /* ---------- controis ---------- */
+  document.querySelectorAll(".lang [data-lang]").forEach((b) => { b.onclick = () => setLang(b.dataset.lang); });
   $("prev").onclick = () => go(state.index - 1);
   $("next").onclick = () => go(state.index + 1);
   $("track").addEventListener("keydown", (e) => {
@@ -208,5 +238,8 @@
     const idx = list().findIndex((p) => p.id === hid);
     if (idx >= 0) state.index = idx;
   }
+  $("wip").hidden = !SITE.underConstruction;
+  document.body.classList.toggle("has-wip", !!SITE.underConstruction);
+  applyStatic();
   renderAll(true);
 })();

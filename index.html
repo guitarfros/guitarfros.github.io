@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GuitarFros · Apps e plugins VST3</title>
+  <!-- Mentres a web estea en construción non queremos que a indexen os buscadores. BORRA esta liña ao lanzala. -->
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Apps para guitarristas e plugins VST3 para guitarra e estudio de GuitarFros, Doctor Migrana e StudioFros.">
   <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,27 +15,36 @@
 </head>
 <body>
 
+  <div class="wip" id="wip" role="status" hidden>
+    <span class="wip-title" data-i18n="wip.title"></span>
+    <span class="wip-text" data-i18n="wip.text"></span>
+  </div>
+
   <div class="layout">
 
     <header class="plate hero">
       <i class="screw tl"></i><i class="screw tr"></i><i class="screw bl"></i><i class="screw br"></i>
-      <img class="hero-logo" src="assets/logo.png" alt="Logo de GuitarFros App" width="220" height="220">
+      <img class="hero-logo" src="assets/logo-engraved.png" alt="Logo de GuitarFros App" data-i18n-alt="logoAlt">
       <h1>GuitarFros</h1>
-      <p>Apps para guitarristas e plugins VST3 para guitarra e estudio. Elixe un grupo, xira o carrusel e descarga o que che sirva.</p>
-      <a class="mail" href="mailto:guitarfros@gmail.com">guitarfros@gmail.com</a>
+      <p data-i18n="hero.text"></p>
+      <div class="lang" role="group" data-i18n-aria="lang.label" aria-label="Idioma">
+        <button class="switch mini" type="button" data-lang="gl" aria-pressed="false"><i class="led"></i><span>Galego</span></button>
+        <button class="switch mini" type="button" data-lang="es" aria-pressed="false"><i class="led"></i><span>Español</span></button>
+        <button class="switch mini" type="button" data-lang="en" aria-pressed="false"><i class="led"></i><span>English</span></button>
+      </div>
     </header>
 
     <div class="content">
-      <nav class="plate selector" aria-label="Grupos" id="groups"></nav>
+      <nav class="plate selector" data-i18n-aria="nav.groups" aria-label="Grupos" id="groups"></nav>
 
       <main>
-        <section class="stage" aria-roledescription="carrusel" aria-label="Catálogo">
-          <button class="arrow prev" id="prev" aria-label="Anterior"><span></span></button>
+        <section class="stage" aria-roledescription="carrusel" data-i18n-aria="stage.label" aria-label="Catálogo">
+          <button class="arrow prev" id="prev" data-i18n-aria="prev" aria-label="Anterior"><span></span></button>
           <div class="track" id="track" tabindex="0" aria-live="polite"></div>
-          <button class="arrow next" id="next" aria-label="Seguinte"><span></span></button>
+          <button class="arrow next" id="next" data-i18n-aria="next" aria-label="Seguinte"><span></span></button>
         </section>
 
-        <div class="dots" id="dots" role="tablist" aria-label="Elementos do grupo"></div>
+        <div class="dots" id="dots" role="tablist" data-i18n-aria="dots" aria-label="Elementos do grupo"></div>
 
         <article class="plate detail" id="detail">
           <i class="screw tl"></i><i class="screw tr"></i><i class="screw bl"></i><i class="screw br"></i>
@@ -44,14 +55,16 @@
           <div class="downloads" id="d-downloads"></div>
         </article>
       </main>
+
+      <footer>
+    <p><span data-i18n="footer"></span> · <a href="mailto:guitarfros@gmail.com">guitarfros@gmail.com</a></p>
+  </footer>
     </div>
 
   </div>
 
-  <footer>
-    <p>© GuitarFros · Feito con rock and roll · <a href="mailto:guitarfros@gmail.com">guitarfros@gmail.com</a></p>
-  </footer>
 
+  <script src="i18n.js"></script>
   <script src="plugins.js"></script>
   <script src="app.js"></script>
 </body>
