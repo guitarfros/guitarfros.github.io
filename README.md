@@ -15,14 +15,13 @@ Se queres unha imaxe propia, ponla en `assets/plugins/` e escribe a ruta en `ima
 Se deixas `image: ""`, xérase automaticamente unha chapa plateada co nome do plugin.
 
 ## Descargas
-Sube os ficheiros a **Releases** do repositorio co nome `ID-linux.zip`, `ID-mac.zip` e `ID-win.zip`
-(por exemplo `sf-tape-machine-win.zip`) e cambia `releasesBase` en `plugins.js` polo teu usuario/repo.
-Se un plugin non ten versión para algún sistema, pon `downloads: { mac: null }`.
+Cada plugin ten no seu bloque de `plugins.js` un apartado `downloads` con tres enlaces (`linux`, `mac`, `win`).
+Os que non teñan enlace móstranse desactivados como "Próximamente".
 
 ## Ligazón directa a un plugin
 `https://TU_USUARIO.github.io/TU_REPO/#studio/sf-tape-machine`
 
 ## Imaxes dos plugins
-Ponlle á imaxe o nome do `id` do plugin e déixaa en `assets/plugins/`
-(por exemplo `assets/plugins/sf-tape-machine.png`). A web atópaa soa, sen tocar código.
-Valen `.png`, `.jpg` e `.webp`; o ideal é formato 4:3 (ex.: 800x600).
+Van no cartafol `assets/plugins/`, en formato 4:3 (800x600). O nome de cada ficheiro vén indicado no campo `image`
+de cada plugin en `plugins.js`. Se un ficheiro non existe, a web mostra unha chapa xerada no seu lugar.
+Ollo: GitHub Pages distingue maiúsculas e minúsculas (`Reverb_GitHub.png` non é o mesmo que `reverb_github.png`).

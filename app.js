@@ -15,6 +15,8 @@
     return LANGS.includes(n) ? n : "en";
   }
   const state = { group: SITE.groups[0].id, index: 0, lang: initialLang() };
+  let swipedAt = 0;      // evita que un deslizamento conte tamén como clic
+  let lastFocus = null;
   // L: texto simple ou {gl,es,en}  ·  T: texto fixo da interface
   const L = (v) => (v && typeof v === "object") ? (v[state.lang] || v.gl || Object.values(v)[0] || "") : (v || "");
   const T = (k) => (I18N[state.lang] && I18N[state.lang][k]) || I18N.gl[k] || k;
@@ -135,7 +137,11 @@
         card.className = "card";
         card.setAttribute("aria-label", `${p.name}`);
         card.appendChild(media(p));
-        card.onclick = () => go(i);
+        card.onclick = () => {
+          if (Date.now() - swipedAt < 400) return;
+          if (i === state.index) openLightbox(list()[i]);   // o central amplíase
+          else go(i);
+        };
         track.appendChild(card);
       });
     }
@@ -148,6 +154,8 @@
       card.classList.toggle("far", Math.abs(o) > 2);
       card.tabIndex = o === 0 ? 0 : -1;
       card.setAttribute("aria-current", o === 0 ? "true" : "false");
+      card.setAttribute("aria-label", o === 0 ? `${items[i].name} – ${T("zoom")}` : items[i].name);
+      card.title = o === 0 ? T("zoom") : "";
     });
     $("prev").disabled = state.index === 0;
     $("next").disabled = state.index === items.length - 1;
@@ -177,7 +185,24 @@
     if (!p) return;
     const g = groupOf(p.group);
     $("d-brand").textContent = g.brand;
-    $("d-name").textContent = p.name;
+    const nm = $("d-name");
+    nm.textContent = "";
+    if (p.readme) {                       // o nome leva ao README de GitHub
+      const a = document.createElement("a");
+      a.className = "name-link";
+      a.href = p.readme; a.target = "_blank"; a.rel = "noopener";
+      a.title = T("readme");
+      a.textContent = p.name;
+      nm.appendChild(a);
+    } else {
+      nm.textContent = p.name;
+    }
+    if (p.wip) {                          // selo EN CONSTRUCIÓN
+      const b = document.createElement("span");
+      b.className = "wip-badge";
+      b.textContent = T("wip.title");
+      nm.appendChild(b);
+    }
     $("d-tag").textContent = L(p.tag);
     $("d-desc").textContent = L(p.description);
     const box = $("d-downloads");
@@ -186,7 +211,7 @@
       const url = dlUrl(p, os);
       const a = document.createElement(url ? "a" : "span");
       a.className = "push" + (url ? "" : " off");
-      a.innerHTML = `<small>${esc(T("dl.for"))}</small><b>${os.label}</b>`;
+      a.innerHTML = `<small>${esc(url ? T("dl.for") : T("dl.soon"))}</small><b>${os.label}</b>`;
       if (url) { a.href = url; a.rel = "noopener"; }
       else { a.setAttribute("aria-disabled", "true"); a.title = T("dl.na"); }
       box.appendChild(a);
@@ -215,6 +240,34 @@
     logo.replaceWith(f);
   });
 
+  /* ---------- ventá flotante ---------- */
+  function openLightbox(p) {
+    const lb = $("lightbox");
+    lastFocus = document.activeElement;
+    const box = $("lb-media");
+    box.innerHTML = "";
+    box.appendChild(media(p));
+    $("lb-cap").textContent = `${groupOf(p.group).brand} · ${p.name}`;
+    lb.setAttribute("aria-label", p.name);
+    lb.hidden = false;
+    document.body.classList.add("lb-open");
+    $("lb-close").focus();
+  }
+  function closeLightbox() {
+    const lb = $("lightbox");
+    if (lb.hidden) return;
+    lb.hidden = true;
+    document.body.classList.remove("lb-open");
+    $("lb-media").innerHTML = "";
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  $("lightbox").addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", (e) => {
+    if ($("lightbox").hidden) return;
+    if (e.key === "Escape") closeLightbox();
+    else if (e.key === "Tab") { e.preventDefault(); $("lb-close").focus(); }
+  });
+
   /* ---------- controis ---------- */
   document.querySelectorAll(".lang [data-lang]").forEach((b) => { b.onclick = () => setLang(b.dataset.lang); });
   $("prev").onclick = () => go(state.index - 1);
@@ -228,7 +281,7 @@
   window.addEventListener("pointerup", (e) => {
     if (x0 === null) return;
     const dx = e.clientX - x0; x0 = null;
-    if (Math.abs(dx) > 50) go(state.index + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 50) { swipedAt = Date.now(); go(state.index + (dx < 0 ? 1 : -1)); }
   });
 
   /* ---------- inicio (admite enlaces tipo #studio/sf-tape-machine) ---------- */
