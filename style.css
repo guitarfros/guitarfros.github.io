@@ -268,7 +268,7 @@ body {
   padding: 0;
   border: 0; background: none; cursor: pointer;
   transform: translateX(calc(var(--o, 0) * var(--step))) scale(max(.4, calc(1 - var(--abs, 0) * .55)));
-  opacity: calc(1 - var(--abs, 0) * .14);
+  opacity: calc(1 - var(--abs, 0) * .70);
   filter: brightness(calc(1 - var(--abs, 0) * .04));
   transition: transform .45s cubic-bezier(.3,.8,.3,1), opacity .45s, filter .45s, visibility .45s;
 }
