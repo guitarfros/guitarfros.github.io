@@ -19,6 +19,7 @@ Cada plugin ten no seu bloque de `plugins.js` un apartado `downloads` con tres e
 Os que non teñan enlace móstranse desactivados como "Próximamente".
 
 ## Ligazón directa a un plugin
+(A web sempre se abre en Plugins de guitarra; só se salta a outro plugin se a ligazón leva este final.)
 `https://TU_USUARIO.github.io/TU_REPO/#studio/sf-tape-machine`
 
 ## Imaxes dos plugins

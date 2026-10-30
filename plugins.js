@@ -15,10 +15,14 @@ const SITE = {
   releasesBase: "",
 
   // Os tres grandes grupos (podes engadir un cuarto se algún día o precisas).
+  // Orde dos botóns de grupo (de esquerda a dereita).
+  // Grupo co que se abre a web (se non, abre o primeiro da lista):
+  defaultGroup: "guitar",
+
   groups: [
-    { id: "apps",   title: { gl: "APPs para guitarristas",     es: "APPs para guitarristas",     en: "Apps for guitarists" },      brand: "GuitarFros",     led: "#c8372d" },
     { id: "guitar", title: { gl: "Plugins VST3 para guitarra", es: "Plugins VST3 para guitarra", en: "VST3 plugins for guitar" },  brand: "Doctor Migrana", led: "#e0922f" },
     { id: "studio", title: { gl: "Plugins VST3 para estudio",  es: "Plugins VST3 para estudio",  en: "VST3 plugins for studio" },  brand: "StudioFros",     led: "#3f9aa8" },
+    { id: "apps",   title: { gl: "APPs para guitarristas",     es: "APPs para guitarristas",     en: "Apps for guitarists" },      brand: "GuitarFros",     led: "#c8372d" },
   ],
 };
 

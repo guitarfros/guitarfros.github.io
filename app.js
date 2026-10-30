@@ -14,7 +14,7 @@
     const n = (navigator.language || "").slice(0, 2).toLowerCase();
     return LANGS.includes(n) ? n : "en";
   }
-  const state = { group: SITE.groups[0].id, index: 0, lang: initialLang() };
+  const state = { group: (SITE.defaultGroup && groupOf(SITE.defaultGroup)) ? SITE.defaultGroup : SITE.groups[0].id, index: 0, lang: initialLang() };
   let swipedAt = 0;      // evita que un deslizamento conte tamén como clic
   let lastFocus = null;
   // L: texto simple ou {gl,es,en}  ·  T: texto fixo da interface
@@ -146,7 +146,14 @@
       });
     }
     [...track.children].forEach((card, i) => {
-      const o = i - state.index;
+      // posición circular: despois do último vén o primeiro
+      const n = items.length;
+      let o = (((i - state.index) % n) + n) % n;
+      if (o > n / 2) o -= n;
+      const prevO = card.dataset.o === undefined ? null : Number(card.dataset.o);
+      const jump = prevO !== null && Math.abs(o - prevO) > 1;   // salta dun extremo ao outro
+      if (jump) card.style.transition = "none";                 // sen animación (non cruza a pantalla)
+      card.dataset.o = o;
       card.style.setProperty("--o", o);
       card.style.setProperty("--abs", Math.min(Math.abs(o), 3));
       card.style.zIndex = String(10 - Math.abs(o));
@@ -156,9 +163,10 @@
       card.setAttribute("aria-current", o === 0 ? "true" : "false");
       card.setAttribute("aria-label", o === 0 ? `${items[i].name} – ${T("zoom")}` : items[i].name);
       card.title = o === 0 ? T("zoom") : "";
+      if (jump) { void card.offsetWidth; card.style.transition = ""; }
     });
-    $("prev").disabled = state.index === 0;
-    $("next").disabled = state.index === items.length - 1;
+    $("prev").disabled = items.length < 2;
+    $("next").disabled = items.length < 2;
 
     const dots = $("dots");
     dots.innerHTML = "";
@@ -216,12 +224,11 @@
       else { a.setAttribute("aria-disabled", "true"); a.title = T("dl.na"); }
       box.appendChild(a);
     });
-    history.replaceState(null, "", `#${p.group}/${p.id}`);
   }
 
   function go(i) {
     const n = list().length;
-    state.index = Math.max(0, Math.min(n - 1, i));
+    state.index = ((i % n) + n) % n;                          // carrusel continuo
     renderTrack(false);
     renderDetail();
   }
