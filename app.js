@@ -37,6 +37,12 @@
     renderAll(true);
   }
   const list = () => PLUGINS.filter((p) => p.group === state.group);
+  // Plugin co que empeza o carrusel dun grupo (group.start) ou o primeiro
+  const startIndex = (gid) => {
+    const g = groupOf(gid);
+    const i = g && g.start ? PLUGINS.filter((p) => p.group === gid).findIndex((p) => p.id === g.start) : -1;
+    return i >= 0 ? i : 0;
+  };
 
   /* ---------- chapa plateada xerada (cando non hai imaxe) ---------- */
   function hash(str) { let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; }
@@ -90,22 +96,41 @@
 
   // Espazo para a imaxe: usa p.image, ou busca automaticamente assets/plugins/<id>.png|jpg|webp.
   // Se non hai imaxe, queda a chapa plateada xerada.
+  // Lembramos que imaxes existen (imgState) e precargámolas ao abrir a web, para que ao cambiar
+  // de grupo a imaxe real apareza á vez, sen mostrar antes unha chapa de proba (parpadeo).
+  const imgState = {};                                   // url -> "ok" | "fail"
+  const imageCandidates = (p) => p.image
+    ? [p.image]
+    : ["png", "jpg", "jpeg", "webp"].map((e) => `assets/plugins/${p.id}.${e}`);
+  function probe(url) {
+    return new Promise((res) => {
+      if (imgState[url]) return res(imgState[url] === "ok");
+      const im = new Image();
+      im.onload = () => { imgState[url] = "ok"; res(true); };
+      im.onerror = () => { imgState[url] = "fail"; res(false); };
+      im.src = url;
+    });
+  }
   function media(p) {
     const wrap = document.createElement("div");
     wrap.className = "media";
-    wrap.innerHTML = faceplate(p);
-    const candidates = p.image
-      ? [p.image]
-      : ["png", "jpg", "jpeg", "webp"].map((e) => `assets/plugins/${p.id}.${e}`);
-    const tryNext = (i) => {
-      if (i >= candidates.length) return;
+    const cands = imageCandidates(p);
+    const mk = (u) => {
       const img = new Image();
       img.alt = `${groupOf(p.group).brand} ${p.name}`;
-      img.onload = () => { wrap.innerHTML = ""; wrap.appendChild(img); };
-      img.onerror = () => tryNext(i + 1);
-      img.src = candidates[i];
+      img.src = u;
+      return img;
     };
-    tryNext(0);
+    const known = cands.find((u) => imgState[u] === "ok");
+    if (known) { wrap.appendChild(mk(known)); return wrap; }            // xa a temos: á vez
+    if (cands.every((u) => imgState[u] === "fail")) { wrap.innerHTML = faceplate(p); return wrap; }
+    // aínda non sabemos: non pintamos nada ata saber (sen parpadeo) e logo aparece suave
+    (async () => {
+      for (const u of cands) {
+        if (await probe(u)) { wrap.appendChild(mk(u)); wrap.classList.add("fade"); return; }
+      }
+      wrap.innerHTML = faceplate(p); wrap.classList.add("fade");
+    })();
     return wrap;
   }
 
@@ -120,7 +145,7 @@
       b.setAttribute("aria-pressed", String(g.id === state.group));
       b.style.setProperty("--led", g.led);
       b.innerHTML = `<i class="led"></i><span>${esc(L(g.title))}</span>`;
-      b.onclick = () => { state.group = g.id; state.index = 0; renderAll(true); };
+      b.onclick = () => { state.group = g.id; state.index = startIndex(g.id); renderAll(true); };
       nav.appendChild(b);
     });
   }
@@ -158,7 +183,7 @@
       card.style.setProperty("--abs", Math.min(Math.abs(o), 3));
       card.style.zIndex = String(10 - Math.abs(o));
       card.classList.toggle("active", o === 0);
-      card.classList.toggle("far", Math.abs(o) > 2);
+      card.classList.toggle("far", Math.abs(o) > 1);
       card.tabIndex = o === 0 ? 0 : -1;
       card.setAttribute("aria-current", o === 0 ? "true" : "false");
       card.setAttribute("aria-label", o === 0 ? `${items[i].name} – ${T("zoom")}` : items[i].name);
@@ -215,6 +240,16 @@
     $("d-desc").textContent = L(p.description);
     const box = $("d-downloads");
     box.innerHTML = "";
+    if (p.group === "apps") {                         // APP online: un só botón de acceso
+      const url = p.appUrl;
+      const a = document.createElement(url ? "a" : "span");
+      a.className = "push" + (url ? "" : " off");
+      a.innerHTML = `<small>${esc(url ? T("app.label") : T("dl.soon"))}</small><b>${esc(T("app.open"))}</b>`;
+      if (url) { a.href = url; a.target = "_blank"; a.rel = "noopener"; }
+      else { a.setAttribute("aria-disabled", "true"); a.title = T("dl.na"); }
+      box.appendChild(a);
+      return;
+    }
     OS.forEach((os) => {
       const url = dlUrl(p, os);
       const a = document.createElement(url ? "a" : "span");
@@ -292,6 +327,7 @@
   });
 
   /* ---------- inicio (admite enlaces tipo #studio/sf-tape-machine) ---------- */
+  state.index = startIndex(state.group);
   const [hg, hid] = location.hash.slice(1).split("/");
   if (groupOf(hg)) {
     state.group = hg;
@@ -301,5 +337,6 @@
   $("wip").hidden = !SITE.underConstruction;
   document.body.classList.toggle("has-wip", !!SITE.underConstruction);
   applyStatic();
+  PLUGINS.forEach((p) => imageCandidates(p).forEach((u) => probe(u)));   // precarga das imaxes
   renderAll(true);
 })();

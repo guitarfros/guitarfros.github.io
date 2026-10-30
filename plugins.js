@@ -16,11 +16,12 @@ const SITE = {
 
   // Os tres grandes grupos (podes engadir un cuarto se algún día o precisas).
   // Orde dos botóns de grupo (de esquerda a dereita).
+  // Cada grupo pode ter  start: "id-do-plugin"  para dicir co que empeza o seu carrusel (se non, o primeiro).
   // Grupo co que se abre a web (se non, abre o primeiro da lista):
   defaultGroup: "guitar",
 
   groups: [
-    { id: "guitar", title: { gl: "Plugins VST3 para guitarra", es: "Plugins VST3 para guitarra", en: "VST3 plugins for guitar" },  brand: "Doctor Migrana", led: "#e0922f" },
+    { id: "guitar", start: "dm-rockon", title: { gl: "Plugins VST3 para guitarra", es: "Plugins VST3 para guitarra", en: "VST3 plugins for guitar" },  brand: "Doctor Migrana", led: "#e0922f" },
     { id: "studio", title: { gl: "Plugins VST3 para estudio",  es: "Plugins VST3 para estudio",  en: "VST3 plugins for studio" },  brand: "StudioFros",     led: "#3f9aa8" },
     { id: "apps",   title: { gl: "APPs para guitarristas",     es: "APPs para guitarristas",     en: "Apps for guitarists" },      brand: "GuitarFros",     led: "#c8372d" },
   ],
@@ -38,6 +39,7 @@ const SITE = {
    description texto explicativo, nos 3 idiomas { gl, es, en }
                (tamén vale un texto simple, igual para todos os idiomas)
    readme      OPCIONAL. Ligazón ao README do plugin en GitHub: o nome pasa a ser un enlace.
+   appUrl      Só nas APPs (online): ligazón do botón "Acceder á APP" (en vez dos 3 botóns de descarga).
    wip         OPCIONAL. Pon  wip: true  para mostrar o selo "EN CONSTRUCIÓN" xunto ao nome.
    image       ruta da imaxe, ex.: "assets/plugins/tape-machine.png"
                (se a deixas baleira, busca assets/plugins/<id>.png|jpg|webp
@@ -56,6 +58,7 @@ const PLUGINS = [
     tag: { gl: "App para guitarristas", es: "App para guitarristas", en: "App for guitarists" },
     description: { gl: "A aplicación principal de GuitarFros: todo o que necesitas para practicar e tocar a guitarra nun só sitio. (Texto provisional: cámbiao polo teu.)", es: "La aplicación principal de GuitarFros: todo lo que necesitas para practicar y tocar la guitarra en un solo sitio. (Texto provisional: cámbialo por el tuyo.)", en: "The main GuitarFros app: everything you need to practise and play guitar in one place. (Placeholder text: replace it with your own.)" },
     image: "",
+    appUrl: "",   // <- enlace para ACCEDER á APP online (se está baleiro, o botón sae como "Próximamente")
   },
   {
     id: "gp5-presets-creator", group: "apps",
@@ -64,32 +67,45 @@ const PLUGINS = [
     tag: { gl: "Creador de presets", es: "Creador de presets", en: "Presets creator" },
     description: { gl: "Crea presets a partir dos teus ficheiros Guitar Pro 5 (.gp5) sen sufrir co proceso. (Texto provisional.)", es: "Crea presets a partir de tus archivos Guitar Pro 5 (.gp5) sin sufrir con el proceso. (Texto provisional.)", en: "Create presets from your Guitar Pro 5 (.gp5) files without the hassle. (Placeholder text.)" },
     image: "",
+    appUrl: "",   // <- enlace para ACCEDER á APP online (se está baleiro, o botón sae como "Próximamente")
   },
 
   /* ===== Plugins VST3 para guitarra (Doctor Migrana) ===== */
   {
     id: "dm-noise-gate", group: "guitar",
     name: "Noise Gate",
-    wip: true,
     tag: { gl: "Porta de ruído", es: "Puerta de ruido", en: "Noise gate" },
     description: { gl: "Corta o ruído e o zumbido entre notas para que a túa guitarra soe limpa, mesmo con moito gain. (Texto provisional.)", es: "Corta el ruido y el zumbido entre notas para que tu guitarra suene limpia, incluso con mucha ganancia. (Texto provisional.)", en: "Cuts noise and hum between notes so your guitar stays clean, even with heavy gain. (Placeholder text.)" },
     image: "assets/plugins/NoiseGate_GitHub.png",
+    downloads: {
+      linux: "https://github.com/guitarfros/DoctorMigrana-NoiseGate/releases/download/v1.0.0/Doctor-Migrana-Noise-Gate-Linux.zip",
+      mac:   "https://github.com/guitarfros/DoctorMigrana-NoiseGate/releases/download/v1.0.0/Doctor-Migrana-Noise-Gate-macOS.zip",
+      win:   "https://github.com/guitarfros/DoctorMigrana-NoiseGate/releases/download/v1.0.0/Doctor-Migrana-Noise-Gate-Windows.zip",
+    },
   },
   {
     id: "dm-rockon", group: "guitar",
     name: "RockON 3-in-1",
-    wip: true,
     tag: { gl: "Tres efectos nun", es: "Tres efectos en uno", en: "Three effects in one" },
     description: { gl: "Tres efectos de guitarra combinados nun só plugin, listos para sacar o teu son rockeiro. (Texto provisional.)", es: "Tres efectos de guitarra combinados en un solo plugin, listos para sacar tu sonido más rockero. (Texto provisional.)", en: "Three guitar effects combined in a single plugin, ready to bring out your rock sound. (Placeholder text.)" },
     image: "assets/plugins/RockOn_GitHub.png",
+    downloads: {
+      linux: "https://github.com/guitarfros/DoctorMigrana-RockON3-in-1/releases/download/v1.0.0/DoctorMigrana-RockON-3in1-VST3-Linux.zip",
+      mac:   "https://github.com/guitarfros/DoctorMigrana-RockON3-in-1/releases/download/v1.0.0/DoctorMigrana-RockON-3in1-VST3-macOS.zip",
+      win:   "https://github.com/guitarfros/DoctorMigrana-RockON3-in-1/releases/download/v1.0.0/DoctorMigrana-RockON-3in1-VST3-Windows.zip",
+    },
   },
   {
     id: "dm-reverb", group: "guitar",
     name: "Reverb",
-    wip: true,
     tag: { gl: "Reverberación", es: "Reverberación", en: "Reverb" },
     description: { gl: "Unha reverb pensada para guitarra: desde un cuarto pequeno ata salas enormes. (Texto provisional.)", es: "Una reverb pensada para guitarra: desde una habitación pequeña hasta salas enormes. (Texto provisional.)", en: "A reverb made for guitar: from a small room to huge halls. (Placeholder text.)" },
     image: "assets/plugins/Reverb_GitHub.png",
+    downloads: {
+      linux: "https://github.com/guitarfros/DoctorMigrana-SpringReverb/releases/download/v1.0.0/Doctor-Migrana-Reverb-Linux-VST3.zip",
+      mac:   "https://github.com/guitarfros/DoctorMigrana-SpringReverb/releases/download/v1.0.0/Doctor-Migrana-Reverb-macOS-VST3.zip",
+      win:   "https://github.com/guitarfros/DoctorMigrana-SpringReverb/releases/download/v1.0.0/Doctor-Migrana-Reverb-Windows-VST3.zip",
+    },
   },
   {
     id: "dm-tremolo", group: "guitar",
@@ -107,10 +123,14 @@ const PLUGINS = [
   {
     id: "dm-tuner", group: "guitar",
     name: "Tuner",
-    wip: true,
     tag: { gl: "Afinador", es: "Afinador", en: "Tuner" },
     description: { gl: "Afinador preciso dentro da túa DAW, para que sempre empeces a gravar afinado. (Texto provisional.)", es: "Afinador preciso dentro de tu DAW, para que siempre empieces a grabar afinado. (Texto provisional.)", en: "An accurate tuner inside your DAW, so you always start recording in tune. (Placeholder text.)" },
     image: "assets/plugins/Tuner_GitHub.png",
+    downloads: {
+      linux: "https://github.com/guitarfros/DoctorMigrana-Tuner/releases/download/v1.0.0/DoctorMigranaTuner-v1.0.0-Linux.zip",
+      mac:   "https://github.com/guitarfros/DoctorMigrana-Tuner/releases/download/v1.0.0/DoctorMigranaTuner-v1.0.0-macOS.zip",
+      win:   "https://github.com/guitarfros/DoctorMigrana-Tuner/releases/download/v1.0.0/DoctorMigranaTuner-v1.0.0-Windows.zip",
+    },
   },
 
   /* ===== Plugins VST3 para estudio (StudioFros) ===== */
