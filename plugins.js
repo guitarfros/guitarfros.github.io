@@ -74,6 +74,7 @@ const PLUGINS = [
   {
     id: "dm-noise-gate", group: "guitar",
     name: "Noise Gate",
+    readme: "https://github.com/guitarfros/DoctorMigrana-NoiseGate/blob/main/README.md",
     tag: { gl: "Porta de ruído", es: "Puerta de ruido", en: "Noise gate" },
     description: { gl: "Pedal de noise gate clásico inspirado nos pedais Boss NS-2.", es: "Pedal de noise gate clásico inspirado en los pedales Boss NS-2.", en: "A classic noise gate pedal inspired by the Boss NS-2 pedals." },
     image: "assets/plugins/NoiseGate_GitHub.png",
@@ -86,6 +87,7 @@ const PLUGINS = [
   {
     id: "dm-rockon", group: "guitar",
     name: "RockOn 3-in-1",
+    readme: "https://github.com/guitarfros/DoctorMigrana-RockON3-in-1/blob/main/README.md",
     tag: { gl: "Tres efectos nun", es: "Tres efectos en uno", en: "Three effects in one" },
     description: { gl: "Pedal con booster, compresor e overdrive inspirados respectivamente nun Rangemaster, Dyna Comp e TubeScreamer. Todo o necesario para facer o Rock!", es: "Pedal con booster, compresor y overdrive inspirados respectivamente en un Rangemaster, un Dyna Comp y un TubeScreamer. ¡Todo lo necesario para hacer Rock!", en: "A pedal with a booster, compressor and overdrive inspired by a Rangemaster, a Dyna Comp and a TubeScreamer respectively. Everything you need to rock!" },
     image: "assets/plugins/RockOn_GitHub.png",
@@ -98,6 +100,7 @@ const PLUGINS = [
   {
     id: "dm-reverb", group: "guitar",
     name: "Spring Reverb",
+    readme: "https://github.com/guitarfros/DoctorMigrana-SpringReverb/blob/main/README.md",
     tag: { gl: "Reverb de resortes", es: "Reverb de muelles", en: "Spring reverb" },
     description: { gl: "Pedal de reverb de resortes inspirada na reverb que montaban os amplificadores Fender 6G15.", es: "Pedal de reverb de muelles inspirada en la reverb que montaban los amplificadores Fender 6G15.", en: "A spring reverb pedal inspired by the reverb built into Fender 6G15 amplifiers." },
     image: "assets/plugins/Reverb_GitHub.png",
@@ -123,7 +126,8 @@ const PLUGINS = [
   {
     id: "dm-tuner", group: "guitar",
     name: "Tuner",
-    tag: "",
+    readme: "https://github.com/guitarfros/DoctorMigrana-Tuner/blob/main/README.md",
+    tag: { gl: "Pedal afinador", es: "Pedal afinador", en: "Tuner pedal" },
     description: { gl: "Pedal afinador de alta precisión (ata 1cts) e con control de Pitch para calibralo.", es: "Pedal afinador de alta precisión (hasta 1 cent) y con control de Pitch para calibrarlo.", en: "A high-precision tuner pedal (down to 1 cent) with a Pitch control to calibrate it." },
     image: "assets/plugins/Tuner_GitHub.png",
     downloads: {
