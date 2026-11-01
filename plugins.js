@@ -21,9 +21,9 @@ const SITE = {
   defaultGroup: "guitar",
 
   groups: [
-    { id: "guitar", start: "dm-rockon", title: { gl: "Plugins VST3 para guitarra", es: "Plugins VST3 para guitarra", en: "VST3 plugins for guitar" },  brand: "Doctor Migrana", led: "#e0922f" },
-    { id: "studio", title: { gl: "Plugins VST3 para estudio",  es: "Plugins VST3 para estudio",  en: "VST3 plugins for studio" },  brand: "StudioFros",     led: "#3f9aa8" },
-    { id: "apps",   title: { gl: "APPs para guitarristas",     es: "APPs para guitarristas",     en: "Apps for guitarists" },      brand: "GuitarFros",     led: "#c8372d" },
+    { id: "guitar", start: "dm-rockon", title: { gl: "Plugins VST3 para guitarra", es: "Plugins VST3 para guitarra", en: "VST3 plugins for guitar" },  brand: "Doctor Migraña", led: "#e0922f" },
+    { id: "studio", title: { gl: "Plugins VST3 para estudio",  es: "Plugins VST3 para estudio",  en: "VST3 plugins for studio" },  brand: "Studio Fros",     led: "#3f9aa8" },
+    { id: "apps",   title: { gl: "APPs para guitarristas",     es: "APPs para guitarristas",     en: "Apps for guitarists" },      brand: "Guitar Fros",     led: "#c8372d" },
   ],
 };
 
@@ -34,8 +34,8 @@ const SITE = {
 
    id          nome curto sen espazos (úsase para os ficheiros e a imaxe)
    group       "apps" | "guitar" | "studio"
-   name        nome que se mostra
-   tag         subtítulo curto, nos 3 idiomas { gl, es, en }
+   name        nome que se mostra (texto simple, ou { gl, es, en } se cambia co idioma)
+   tag         subtítulo curto, nos 3 idiomas { gl, es, en } (se o deixas "" non se mostra)
    description texto explicativo, nos 3 idiomas { gl, es, en }
                (tamén vale un texto simple, igual para todos os idiomas)
    readme      OPCIONAL. Ligazón ao README do plugin en GitHub: o nome pasa a ser un enlace.
@@ -55,18 +55,18 @@ const PLUGINS = [
     id: "guitarfros", group: "apps",
     name: "GuitarFros",
     wip: true,
-    tag: { gl: "App para guitarristas", es: "App para guitarristas", en: "App for guitarists" },
-    description: { gl: "A aplicación principal de GuitarFros: todo o que necesitas para practicar e tocar a guitarra nun só sitio. (Texto provisional: cámbiao polo teu.)", es: "La aplicación principal de GuitarFros: todo lo que necesitas para practicar y tocar la guitarra en un solo sitio. (Texto provisional: cámbialo por el tuyo.)", en: "The main GuitarFros app: everything you need to practise and play guitar in one place. (Placeholder text: replace it with your own.)" },
-    image: "",
+    tag: { gl: "Trebellos para guitarristas", es: "Herramientas para guitarristas", en: "Tools for guitarists" },
+    description: { gl: "APP online que inclúe diferentes ferramentas: afinador, metrónomo, backingtracks, xerador de progresións de acordes, estudo de funcións harmónicas, escalas, arpexios, modos, acordes, tríadas e un identificador de acordes. Todo isto para varios instrumentos de corda: guitarra, baixo, ukelele, mandolina, banjo,...", es: "APP online que incluye distintas herramientas: afinador, metrónomo, backing tracks, generador de progresiones de acordes, estudio de funciones armónicas, escalas, arpegios, modos, acordes, tríadas y un identificador de acordes. Todo ello para varios instrumentos de cuerda: guitarra, bajo, ukelele, mandolina, banjo,...", en: "Online app with several tools: tuner, metronome, backing tracks, chord progression generator, study of harmonic functions, scales, arpeggios, modes, chords, triads and a chord identifier. All of it for several string instruments: guitar, bass, ukulele, mandolin, banjo, ..." },
+    image: "assets/plugins/GuitarFros_2_0.png",
     appUrl: "",   // <- enlace para ACCEDER á APP online (se está baleiro, o botón sae como "Próximamente")
   },
   {
     id: "gp5-presets-creator", group: "apps",
-    name: "GP5 Presets Creator",
+    name: "GP-5 Preset Creator",
     wip: true,
-    tag: { gl: "Creador de presets", es: "Creador de presets", en: "Presets creator" },
-    description: { gl: "Crea presets a partir dos teus ficheiros Guitar Pro 5 (.gp5) sen sufrir co proceso. (Texto provisional.)", es: "Crea presets a partir de tus archivos Guitar Pro 5 (.gp5) sin sufrir con el proceso. (Texto provisional.)", en: "Create presets from your Guitar Pro 5 (.gp5) files without the hassle. (Placeholder text.)" },
-    image: "",
+    tag: { gl: "Creador de presets para o multiefectos Valeton GP-5", es: "Creador de presets para el multiefectos Valeton GP-5", en: "Preset creator for the Valeton GP-5 multi-effects unit" },
+    description: { gl: "APP online que, a partir dun audio dunha guitarra pode darche os valores aproximados para configurar o teu multiefectos Valeton GP-5.", es: "APP online que, a partir de un audio de guitarra, puede darte los valores aproximados para configurar tu multiefectos Valeton GP-5.", en: "An online app that, from an audio recording of a guitar, can give you the approximate values to set up your Valeton GP-5 multi-effects unit." },
+    image: "assets/plugins/GP5_Preset_Creator.png",
     appUrl: "",   // <- enlace para ACCEDER á APP online (se está baleiro, o botón sae como "Próximamente")
   },
 
@@ -75,7 +75,7 @@ const PLUGINS = [
     id: "dm-noise-gate", group: "guitar",
     name: "Noise Gate",
     tag: { gl: "Porta de ruído", es: "Puerta de ruido", en: "Noise gate" },
-    description: { gl: "Corta o ruído e o zumbido entre notas para que a túa guitarra soe limpa, mesmo con moito gain. (Texto provisional.)", es: "Corta el ruido y el zumbido entre notas para que tu guitarra suene limpia, incluso con mucha ganancia. (Texto provisional.)", en: "Cuts noise and hum between notes so your guitar stays clean, even with heavy gain. (Placeholder text.)" },
+    description: { gl: "Pedal de noise gate clásico inspirado nos pedais Boss NS-2.", es: "Pedal de noise gate clásico inspirado en los pedales Boss NS-2.", en: "A classic noise gate pedal inspired by the Boss NS-2 pedals." },
     image: "assets/plugins/NoiseGate_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/DoctorMigrana-NoiseGate/releases/download/v1.0.0/Doctor-Migrana-Noise-Gate-Linux.zip",
@@ -85,9 +85,9 @@ const PLUGINS = [
   },
   {
     id: "dm-rockon", group: "guitar",
-    name: "RockON 3-in-1",
+    name: "RockOn 3-in-1",
     tag: { gl: "Tres efectos nun", es: "Tres efectos en uno", en: "Three effects in one" },
-    description: { gl: "Tres efectos de guitarra combinados nun só plugin, listos para sacar o teu son rockeiro. (Texto provisional.)", es: "Tres efectos de guitarra combinados en un solo plugin, listos para sacar tu sonido más rockero. (Texto provisional.)", en: "Three guitar effects combined in a single plugin, ready to bring out your rock sound. (Placeholder text.)" },
+    description: { gl: "Pedal con booster, compresor e overdrive inspirados respectivamente nun Rangemaster, Dyna Comp e TubeScreamer. Todo o necesario para facer o Rock!", es: "Pedal con booster, compresor y overdrive inspirados respectivamente en un Rangemaster, un Dyna Comp y un TubeScreamer. ¡Todo lo necesario para hacer Rock!", en: "A pedal with a booster, compressor and overdrive inspired by a Rangemaster, a Dyna Comp and a TubeScreamer respectively. Everything you need to rock!" },
     image: "assets/plugins/RockOn_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/DoctorMigrana-RockON3-in-1/releases/download/v1.0.0/DoctorMigrana-RockON-3in1-VST3-Linux.zip",
@@ -97,9 +97,9 @@ const PLUGINS = [
   },
   {
     id: "dm-reverb", group: "guitar",
-    name: "Reverb",
-    tag: { gl: "Reverberación", es: "Reverberación", en: "Reverb" },
-    description: { gl: "Unha reverb pensada para guitarra: desde un cuarto pequeno ata salas enormes. (Texto provisional.)", es: "Una reverb pensada para guitarra: desde una habitación pequeña hasta salas enormes. (Texto provisional.)", en: "A reverb made for guitar: from a small room to huge halls. (Placeholder text.)" },
+    name: "Spring Reverb",
+    tag: { gl: "Reverb de resortes", es: "Reverb de muelles", en: "Spring reverb" },
+    description: { gl: "Pedal de reverb de resortes inspirada na reverb que montaban os amplificadores Fender 6G15.", es: "Pedal de reverb de muelles inspirada en la reverb que montaban los amplificadores Fender 6G15.", en: "A spring reverb pedal inspired by the reverb built into Fender 6G15 amplifiers." },
     image: "assets/plugins/Reverb_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/DoctorMigrana-SpringReverb/releases/download/v1.0.0/Doctor-Migrana-Reverb-Linux-VST3.zip",
@@ -109,10 +109,10 @@ const PLUGINS = [
   },
   {
     id: "dm-tremolo", group: "guitar",
-    name: "Tremolo",
+    name: { gl: "Trémolo", es: "Trémolo", en: "Tremolo" },
     readme: "https://github.com/guitarfros/DoctorMigrana-Tremolo/blob/main/README.md",
-    tag: { gl: "Trémolo", es: "Trémolo", en: "Tremolo" },
-    description: { gl: "O clásico efecto de ondulación de volume dos amplis antigos. (Texto provisional.)", es: "El clásico efecto de ondulación de volumen de los amplis antiguos. (Texto provisional.)", en: "The classic volume-wobble effect of vintage amps. (Placeholder text.)" },
+    tag: { gl: "Modulación Clásica", es: "Modulación clásica", en: "Classic modulation" },
+    description: { gl: "Pedal de trémolo clásico inspirado nos trémolos que montaban os amplificadores Fender Deluxe 6G3.", es: "Pedal de trémolo clásico inspirado en los trémolos que montaban los amplificadores Fender Deluxe 6G3.", en: "A classic tremolo pedal inspired by the tremolo built into Fender Deluxe 6G3 amplifiers." },
     image: "assets/plugins/Tremolo_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/DoctorMigrana-Tremolo/releases/download/v0.1.0/Doctor-Migrana-Tremolo-Linux.zip",
@@ -123,8 +123,8 @@ const PLUGINS = [
   {
     id: "dm-tuner", group: "guitar",
     name: "Tuner",
-    tag: { gl: "Afinador", es: "Afinador", en: "Tuner" },
-    description: { gl: "Afinador preciso dentro da túa DAW, para que sempre empeces a gravar afinado. (Texto provisional.)", es: "Afinador preciso dentro de tu DAW, para que siempre empieces a grabar afinado. (Texto provisional.)", en: "An accurate tuner inside your DAW, so you always start recording in tune. (Placeholder text.)" },
+    tag: "",
+    description: { gl: "Pedal afinador de alta precisión (ata 1cts) e con control de Pitch para calibralo.", es: "Pedal afinador de alta precisión (hasta 1 cent) y con control de Pitch para calibrarlo.", en: "A high-precision tuner pedal (down to 1 cent) with a Pitch control to calibrate it." },
     image: "assets/plugins/Tuner_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/DoctorMigrana-Tuner/releases/download/v1.0.0/DoctorMigranaTuner-v1.0.0-Linux.zip",
@@ -138,8 +138,8 @@ const PLUGINS = [
     id: "sf-megaphone", group: "studio",
     name: "Megaphone",
     readme: "https://github.com/guitarfros/StudioFros-Megaphone/blob/main/README.md",
-    tag: { gl: "Efecto megáfono", es: "Efecto megáfono", en: "Megaphone effect" },
-    description: { gl: "Dálle ás túas pistas ese son estreito e esnaquizado de megáfono. (Texto provisional.)", es: "Dale a tus pistas ese sonido estrecho y rasgado de megáfono. (Texto provisional.)", en: "Give your tracks that narrow, gritty megaphone sound. (Placeholder text.)" },
+    tag: { gl: "Efecto de megáfono", es: "Efecto de megáfono", en: "Megaphone effect" },
+    description: { gl: "Plugin en formato rack que emula varios tipos de megáfonos.", es: "Plugin en formato rack que emula varios tipos de megáfonos.", en: "A rack-format plugin that emulates several types of megaphones." },
     image: "assets/plugins/Megaphone_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/StudioFros-Megaphone/releases/download/v0.1.0/StudioFros-Megaphone-0.1.0-Linux.zip",
@@ -151,8 +151,8 @@ const PLUGINS = [
     id: "sf-nothing-filter", group: "studio",
     name: "Nothing Filter",
     readme: "https://github.com/guitarfros/StudioFros-NothingFilter/blob/main/README.md",
-    tag: { gl: "Filtro", es: "Filtro", en: "Filter" },
-    description: { gl: "Un filtro con carácter propio para moldear o timbre das túas pistas. (Texto provisional.)", es: "Un filtro con carácter propio para moldear el timbre de tus pistas. (Texto provisional.)", en: "A filter with its own character to shape the tone of your tracks. (Placeholder text.)" },
+    tag: { gl: "Efecto Filtro", es: "Efecto filtro", en: "Filter effect" },
+    description: { gl: "Plugin en formato rack inspirado no son da intro da canción “Money for Nothing” co wha-wha a medio pisar.", es: "Plugin en formato rack inspirado en el sonido de la intro de la canción “Money for Nothing” con el wah-wah a medio pisar.", en: "A rack-format plugin inspired by the sound of the intro to “Money for Nothing”, with the wah-wah pedal half-pressed." },
     image: "assets/plugins/NothingFilter_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/StudioFros-NothingFilter/releases/download/v0.1.0/StudioFros-NothingFilter-v0.1.0-Linux.zip",
@@ -165,7 +165,7 @@ const PLUGINS = [
     name: "Tape Delay",
     readme: "https://github.com/guitarfros/StudioFros-TapeDelay/blob/main/README.md",
     tag: { gl: "Eco de cinta", es: "Eco de cinta", en: "Tape echo" },
-    description: { gl: "Eco de cinta cálido, con ese pequeno tremor que o fixo famoso. (Texto provisional.)", es: "Eco de cinta cálido, con ese pequeño temblor que lo hizo famoso. (Texto provisional.)", en: "Warm tape echo, with that little wobble that made it famous. (Placeholder text.)" },
+    description: { gl: "Plugin en formato rack inspirado nos clásicos ecos de cinta que permite engadir ese carácter de eco analóxico ás nosas gravacións dixitais.", es: "Plugin en formato rack inspirado en los clásicos ecos de cinta que permite añadir ese carácter de eco analógico a nuestras grabaciones digitales.", en: "A rack-format plugin inspired by classic tape echoes that adds that analogue echo character to our digital recordings." },
     image: "assets/plugins/TapeDelay_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/StudioFros-TapeDelay/releases/download/v1.0.0/StudioFros-TapeDelay-linux.zip",
@@ -178,7 +178,7 @@ const PLUGINS = [
     name: "Tape Machine",
     readme: "https://github.com/guitarfros/StuidoFros-TapeMachine/blob/main/README.md",
     tag: { gl: "Máquina de cinta", es: "Máquina de cinta", en: "Tape machine" },
-    description: { gl: "Emula a saturación e o corpo dunha gravadora de cinta analóxica. (Texto provisional.)", es: "Emula la saturación y el cuerpo de una grabadora de cinta analógica. (Texto provisional.)", en: "Emulates the saturation and body of an analogue tape recorder. (Placeholder text.)" },
+    description: { gl: "Plugin en formato rack inspirado nas clásicas máquinas de cinta que permite engadir ese carácter analóxico ás nosas gravacións dixitais.", es: "Plugin en formato rack inspirado en las clásicas máquinas de cinta que permite añadir ese carácter analógico a nuestras grabaciones digitales.", en: "A rack-format plugin inspired by classic tape machines that adds that analogue character to our digital recordings." },
     image: "assets/plugins/TapeMachine_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/StuidoFros-TapeMachine/releases/download/v0.1.0/StudioFros-TapeMachine-Linux-VST3.tar.gz",
@@ -191,7 +191,7 @@ const PLUGINS = [
     name: "Vinyl",
     readme: "https://github.com/guitarfros/StudioFros-Vinyl/blob/main/README.md",
     tag: { gl: "Efecto vinilo", es: "Efecto vinilo", en: "Vinyl effect" },
-    description: { gl: "Estalidos, po e crepitar: o son dun disco de vinilo antigo. (Texto provisional.)", es: "Chasquidos, polvo y crepitar: el sonido de un disco de vinilo antiguo. (Texto provisional.)", en: "Pops, dust and crackle: the sound of an old vinyl record. (Placeholder text.)" },
+    description: { gl: "Plugin en formato rack inspirado nos clásicos reprodutores de vinilo que permite engadir ese carácter analóxico ás nosas gravacións dixitais.", es: "Plugin en formato rack inspirado en los clásicos reproductores de vinilo que permite añadir ese carácter analógico a nuestras grabaciones digitales.", en: "A rack-format plugin inspired by classic vinyl players that adds that analogue character to our digital recordings." },
     image: "assets/plugins/Vinyl_GitHub.png",
     downloads: {
       linux: "https://github.com/guitarfros/StudioFros-Vinyl/releases/download/v1.0.0/StudioFros-Vinyl-Linux.zip",

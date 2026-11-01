@@ -19,6 +19,7 @@
   let lastFocus = null;
   // L: texto simple ou {gl,es,en}  ·  T: texto fixo da interface
   const L = (v) => (v && typeof v === "object") ? (v[state.lang] || v.gl || Object.values(v)[0] || "") : (v || "");
+  const N = (p) => L(p.name);          // nome do plugin (texto simple ou {gl,es,en})
   const T = (k) => (I18N[state.lang] && I18N[state.lang][k]) || I18N.gl[k] || k;
 
   function applyStatic() {
@@ -62,8 +63,8 @@
         <line x1="0" y1="-5" x2="0" y2="-20" stroke="#f1ebd8" stroke-width="3" stroke-linecap="round" transform="rotate(${ang})"/>
       </g>`;
     }
-    const long = p.name.length > 12;
-    return `<svg viewBox="0 0 400 300" role="img" aria-label="${esc(g.brand + " " + p.name)}" xmlns="http://www.w3.org/2000/svg">
+    const long = N(p).length > 12;
+    return `<svg viewBox="0 0 400 300" role="img" aria-label="${esc(g.brand + " " + N(p))}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="pl${p.id}" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="#eceeef"/><stop offset=".5" stop-color="#c3c6c9"/><stop offset="1" stop-color="#a9adb1"/>
@@ -83,7 +84,7 @@
       </g>
       <g stroke="#3b3d40" stroke-width="2"><line x1="24" y1="31" x2="32" y2="25"/><line x1="368" y1="25" x2="376" y2="31"/><line x1="24" y1="275" x2="32" y2="269"/><line x1="368" y1="269" x2="376" y2="275"/></g>
       <text x="200" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="700" font-size="17" letter-spacing="4" fill="#3a3c3f">${esc(g.brand.toUpperCase())}</text>
-      <text x="200" y="124" text-anchor="middle" font-family="'Alfa Slab One',serif" font-size="${long ? 34 : 46}" fill="#1b1c1e" stroke="rgba(255,255,255,.7)" stroke-width=".6" paint-order="stroke">${esc(p.name)}</text>
+      <text x="200" y="124" text-anchor="middle" font-family="'Alfa Slab One',serif" font-size="${long ? 34 : 46}" fill="#1b1c1e" stroke="rgba(255,255,255,.7)" stroke-width=".6" paint-order="stroke">${esc(N(p))}</text>
       <line x1="60" y1="150" x2="340" y2="150" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>
       <line x1="60" y1="152" x2="340" y2="152" stroke="rgba(255,255,255,.7)" stroke-width="1"/>
       <text x="200" y="176" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="16" letter-spacing="3" fill="#4a4c4f">${esc(L(p.tag).toUpperCase())}</text>
@@ -117,7 +118,7 @@
     const cands = imageCandidates(p);
     const mk = (u) => {
       const img = new Image();
-      img.alt = `${groupOf(p.group).brand} ${p.name}`;
+      img.alt = `${groupOf(p.group).brand} ${N(p)}`;
       img.src = u;
       return img;
     };
@@ -160,7 +161,7 @@
         const card = document.createElement("button");
         card.type = "button";
         card.className = "card";
-        card.setAttribute("aria-label", `${p.name}`);
+        card.setAttribute("aria-label", `${N(p)}`);
         card.appendChild(media(p));
         card.onclick = () => {
           if (Date.now() - swipedAt < 400) return;
@@ -186,7 +187,7 @@
       card.classList.toggle("far", Math.abs(o) > 1);
       card.tabIndex = o === 0 ? 0 : -1;
       card.setAttribute("aria-current", o === 0 ? "true" : "false");
-      card.setAttribute("aria-label", o === 0 ? `${items[i].name} – ${T("zoom")}` : items[i].name);
+      card.setAttribute("aria-label", o === 0 ? `${N(items[i])} – ${T("zoom")}` : N(items[i]));
       card.title = o === 0 ? T("zoom") : "";
       if (jump) { void card.offsetWidth; card.style.transition = ""; }
     });
@@ -199,7 +200,7 @@
       const d = document.createElement("button");
       d.type = "button";
       d.className = "dot" + (i === state.index ? " on" : "");
-      d.setAttribute("aria-label", p.name);
+      d.setAttribute("aria-label", N(p));
       d.onclick = () => go(i);
       dots.appendChild(d);
     });
@@ -225,10 +226,10 @@
       a.className = "name-link";
       a.href = p.readme; a.target = "_blank"; a.rel = "noopener";
       a.title = T("readme");
-      a.textContent = p.name;
+      a.textContent = N(p);
       nm.appendChild(a);
     } else {
-      nm.textContent = p.name;
+      nm.textContent = N(p);
     }
     if (p.wip) {                          // selo EN CONSTRUCIÓN
       const b = document.createElement("span");
@@ -289,8 +290,8 @@
     const box = $("lb-media");
     box.innerHTML = "";
     box.appendChild(media(p));
-    $("lb-cap").textContent = `${groupOf(p.group).brand} · ${p.name}`;
-    lb.setAttribute("aria-label", p.name);
+    $("lb-cap").textContent = `${groupOf(p.group).brand} · ${N(p)}`;
+    lb.setAttribute("aria-label", N(p));
     lb.hidden = false;
     document.body.classList.add("lb-open");
     $("lb-close").focus();
@@ -318,12 +319,19 @@
     if (e.key === "ArrowLeft") { go(state.index - 1); e.preventDefault(); }
     if (e.key === "ArrowRight") { go(state.index + 1); e.preventDefault(); }
   });
-  let x0 = null;
-  $("track").addEventListener("pointerdown", (e) => { x0 = e.clientX; });
+  // Deslizamento do carrusel: só conta se o movemento é claramente horizontal.
+  // (Se o dedo empeza un scroll vertical, o navegador cancela o xesto e non facemos nada.)
+  let x0 = null, y0 = null;
+  $("track").addEventListener("pointerdown", (e) => { x0 = e.clientX; y0 = e.clientY; });
+  window.addEventListener("pointercancel", () => { x0 = y0 = null; });
   window.addEventListener("pointerup", (e) => {
     if (x0 === null) return;
-    const dx = e.clientX - x0; x0 = null;
-    if (Math.abs(dx) > 50) { swipedAt = Date.now(); go(state.index + (dx < 0 ? 1 : -1)); }
+    const dx = e.clientX - x0, dy = e.clientY - y0;
+    x0 = y0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      swipedAt = Date.now();
+      go(state.index + (dx < 0 ? 1 : -1));
+    }
   });
 
   /* ---------- inicio (admite enlaces tipo #studio/sf-tape-machine) ---------- */
